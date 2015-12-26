@@ -4,11 +4,11 @@
 
 `go-gpx` is a Go library for parsing GPX 1.1 documents.
 
-# Installation
+## Installation
 
     go get github.com/thcyron/go-gpx
 
-# Usage
+## Usage
 
 ```go
 f, err := os.Open("test.gpx")
@@ -24,10 +24,10 @@ if err != nil {
 fmt.Printf("document has %d track(s)\n", len(doc.Tracks))
 ```
 
-# Documentation
+## Documentation
 
 Documentation is available at [Godoc](http://godoc.org/github.com/thcyron/go-gpx).
 
-# License
+## License
 
 `go-gpx` is licensed under the MIT license.
