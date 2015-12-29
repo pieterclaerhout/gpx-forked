@@ -7,7 +7,7 @@ import (
 )
 
 func TestDecoder(t *testing.T) {
-	f, err := os.Open("test.gpx")
+	f, err := os.Open("test/test.gpx")
 	if err != nil {
 		t.Fatal(err)
 	}
