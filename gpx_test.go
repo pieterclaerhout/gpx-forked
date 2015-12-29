@@ -78,3 +78,15 @@ func TestDecoder(t *testing.T) {
 		}
 	}
 }
+
+func TestDecoderNoGPXTag(t *testing.T) {
+	f, err := os.Open("test/no_gpx.gpx")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = NewDecoder(f).Decode()
+	if err != ErrBadRootTag {
+		t.Fatal("decoding should fail due to bad root tag")
+	}
+}
