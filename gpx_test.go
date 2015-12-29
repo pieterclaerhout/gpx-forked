@@ -90,3 +90,15 @@ func TestDecoderNoGPXTag(t *testing.T) {
 		t.Fatal("decoding should fail due to bad root tag")
 	}
 }
+
+func TestDecoderGPX10(t *testing.T) {
+	f, err := os.Open("test/gpx10.gpx")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = NewDecoder(f).Decode()
+	if err != ErrGPX11Only {
+		t.Fatal("decoding should fail for GPX 1.0 documents")
+	}
+}

@@ -13,6 +13,7 @@ const nsGPX11 = "http://www.topografix.com/GPX/1/1"
 
 var (
 	ErrBadRootTag = errors.New("gpx: root element must be <gpx>")
+	ErrGPX11Only  = errors.New("gpx: can only parse GPX 1.1 documents")
 )
 
 // Decoder decodes a GPX document from an input stream.
@@ -54,7 +55,7 @@ func (d *Decoder) findGPX() (se xml.StartElement, err error) {
 				return se, ErrBadRootTag
 			}
 			if se.Name.Space != nsGPX11 {
-				return se, errors.New("gpx: can only parse GPX 1.1 documents")
+				return se, ErrGPX11Only
 			}
 			return se, nil
 		}
