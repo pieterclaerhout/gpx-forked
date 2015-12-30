@@ -19,7 +19,6 @@ var (
 type Decoder struct {
 	Strict bool
 	r      io.Reader
-	xd     *xml.Decoder
 	ts     tokenStream
 }
 
@@ -34,8 +33,8 @@ func NewDecoder(r io.Reader) *Decoder {
 
 // Decode decodes a document.
 func (d *Decoder) Decode() (doc Document, err error) {
-	d.xd = xml.NewDecoder(d.r)
-	d.ts = tokenStream{d.xd}
+	dec := xml.NewDecoder(d.r)
+	d.ts = tokenStream{dec}
 
 	se, err := d.findGPX()
 	if err != nil {
@@ -47,7 +46,7 @@ func (d *Decoder) Decode() (doc Document, err error) {
 
 func (d *Decoder) findGPX() (se xml.StartElement, err error) {
 	for {
-		tok, err := d.xd.Token()
+		tok, err := d.ts.Token()
 		if err != nil {
 			return se, err
 		}
