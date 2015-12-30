@@ -23,6 +23,15 @@ type Document struct {
 	Tracks   []Track
 }
 
+// Distance returns the track’s total distance in meters.
+func (d Document) Distance() float64 {
+	var distance float64
+	for _, t := range d.Tracks {
+		distance += t.Distance()
+	}
+	return distance
+}
+
 // Metadata provides additional information about a GPX document.
 type Metadata struct {
 	Time time.Time
@@ -33,9 +42,29 @@ type Track struct {
 	Segments []Segment
 }
 
+// Distance returns the track’s total distance in meters.
+func (t Track) Distance() float64 {
+	var distance float64
+	for _, s := range t.Segments {
+		distance += s.Distance()
+	}
+	return distance
+}
+
 // Segments represents a track segment.
 type Segment struct {
 	Points []Point
+}
+
+// Distance returns the segment’s total distance in meters.
+func (s Segment) Distance() float64 {
+	var distance float64
+	for i, p := range s.Points {
+		if i > 0 {
+			distance += s.Points[i-1].DistanceTo(p)
+		}
+	}
+	return distance
 }
 
 // Point represents a track point. Extensions contains the raw XML tokens
@@ -47,6 +76,11 @@ type Point struct {
 	Elevation  float64
 	Time       time.Time
 	Extensions []xml.Token
+}
+
+// DistanceTo returns the distance in meters to point p2.
+func (p Point) DistanceTo(p2 Point) float64 {
+	return haversine(p.Latitude, p.Longitude, p2.Latitude, p2.Longitude)
 }
 
 // Decoder decodes a GPX document from an input stream.

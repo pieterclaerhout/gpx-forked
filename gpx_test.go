@@ -1,6 +1,7 @@
 package gpx
 
 import (
+	"math"
 	"os"
 	"testing"
 	"time"
@@ -30,6 +31,9 @@ func TestDecoder(t *testing.T) {
 		t.Errorf("got %d track(s); expected 1", l)
 	}
 	track := doc.Tracks[0]
+	if dist := track.Distance(); math.Abs(dist-1362.370020) > 0.0000001 {
+		t.Errorf("got %f distance; expected 1362.370020", dist)
+	}
 
 	if l := len(track.Segments); l != 1 {
 		t.Errorf("got %d segment(s); expected 1", l)
