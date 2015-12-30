@@ -21,6 +21,7 @@ type Decoder struct {
 	Strict bool
 	r      io.Reader
 	xd     *xml.Decoder
+	ts     tokenStream
 }
 
 // NewDecoder creates a new decoder reading from r. The decoder
@@ -35,6 +36,7 @@ func NewDecoder(r io.Reader) *Decoder {
 // Decode decodes a document.
 func (d *Decoder) Decode() (doc Document, err error) {
 	d.xd = xml.NewDecoder(d.r)
+	d.ts = tokenStream{d.xd}
 
 	se, err := d.findGPX()
 	if err != nil {
@@ -72,37 +74,34 @@ func (d *Decoder) consumeGPX(se xml.StartElement) (doc Document, err error) {
 		}
 	}
 
-	lvl := 0
-
 	for {
-		tok, err := d.xd.Token()
+		tok, err := d.ts.Token()
 		if err != nil {
 			return doc, err
 		}
 		switch tok.(type) {
 		case xml.StartElement:
 			se := tok.(xml.StartElement)
-			if lvl == 0 && se.Name.Local == "trk" {
+			switch se.Name.Local {
+			case "trk":
 				track, err := d.consumeTrack(se)
 				if err != nil {
 					return doc, err
 				}
 				doc.Tracks = append(doc.Tracks, track)
-			} else if lvl == 0 && se.Name.Local == "metadata" {
+			case "metadata":
 				metadata, err := d.consumeMetadata(se)
 				if err != nil {
 					return doc, err
 				}
 				doc.Metadata = metadata
-			} else {
-				lvl++
+			default:
+				if err := d.ts.skipTag(); err != nil {
+					return doc, err
+				}
 			}
 		case xml.EndElement:
-			ee := tok.(xml.EndElement)
-			if lvl == 0 && ee.Name.Local == "gpx" {
-				return doc, nil
-			}
-			lvl--
+			return doc, nil
 		}
 	}
 
@@ -110,31 +109,28 @@ func (d *Decoder) consumeGPX(se xml.StartElement) (doc Document, err error) {
 }
 
 func (d *Decoder) consumeMetadata(se xml.StartElement) (metadata Metadata, err error) {
-	lvl := 0
-
 	for {
-		tok, err := d.xd.Token()
+		tok, err := d.ts.Token()
 		if err != nil {
 			return metadata, err
 		}
 		switch tok.(type) {
 		case xml.StartElement:
 			se := tok.(xml.StartElement)
-			if lvl == 0 && se.Name.Local == "time" {
+			switch se.Name.Local {
+			case "time":
 				t, err := d.consumeTime(se)
 				if err != nil {
 					return metadata, err
 				}
 				metadata.Time = t
-			} else {
-				lvl++
+			default:
+				if err := d.ts.skipTag(); err != nil {
+					return metadata, err
+				}
 			}
 		case xml.EndElement:
-			ee := tok.(xml.EndElement)
-			if lvl == 0 && ee.Name.Local == "metadata" {
-				return metadata, nil
-			}
-			lvl--
+			return metadata, nil
 		}
 	}
 
@@ -142,31 +138,28 @@ func (d *Decoder) consumeMetadata(se xml.StartElement) (metadata Metadata, err e
 }
 
 func (d *Decoder) consumeTrack(se xml.StartElement) (track Track, err error) {
-	lvl := 0
-
 	for {
-		tok, err := d.xd.Token()
+		tok, err := d.ts.Token()
 		if err != nil {
 			return track, err
 		}
 		switch tok.(type) {
 		case xml.StartElement:
 			se := tok.(xml.StartElement)
-			if lvl == 0 && se.Name.Local == "trkseg" {
+			switch se.Name.Local {
+			case "trkseg":
 				seg, err := d.consumeSegment(se)
 				if err != nil {
 					return track, err
 				}
 				track.Segments = append(track.Segments, seg)
-			} else {
-				lvl++
+			default:
+				if err := d.ts.skipTag(); err != nil {
+					return track, err
+				}
 			}
 		case xml.EndElement:
-			ee := tok.(xml.EndElement)
-			if lvl == 0 && ee.Name.Local == "trk" {
-				return track, nil
-			}
-			lvl--
+			return track, nil
 		}
 	}
 
@@ -174,31 +167,28 @@ func (d *Decoder) consumeTrack(se xml.StartElement) (track Track, err error) {
 }
 
 func (d *Decoder) consumeSegment(se xml.StartElement) (seg Segment, err error) {
-	lvl := 0
-
 	for {
-		tok, err := d.xd.Token()
+		tok, err := d.ts.Token()
 		if err != nil {
 			return seg, err
 		}
 		switch tok.(type) {
 		case xml.StartElement:
 			se := tok.(xml.StartElement)
-			if lvl == 0 && se.Name.Local == "trkpt" {
+			switch se.Name.Local {
+			case "trkpt":
 				point, err := d.consumePoint(se)
 				if err != nil {
 					return seg, err
 				}
 				seg.Points = append(seg.Points, point)
-			} else {
-				lvl++
+			default:
+				if err := d.ts.skipTag(); err != nil {
+					return seg, err
+				}
 			}
 		case xml.EndElement:
-			ee := tok.(xml.EndElement)
-			if lvl == 0 && ee.Name.Local == "trkseg" {
-				return seg, nil
-			}
-			lvl--
+			return seg, nil
 		}
 	}
 
@@ -225,43 +215,40 @@ func (d *Decoder) consumePoint(se xml.StartElement) (point Point, err error) {
 		}
 	}
 
-	lvl := 0
-
 	for {
-		tok, err := d.xd.Token()
+		tok, err := d.ts.Token()
 		if err != nil {
 			return point, err
 		}
 		switch tok.(type) {
 		case xml.StartElement:
 			se := tok.(xml.StartElement)
-			if lvl == 0 && se.Name.Local == "ele" {
+			switch se.Name.Local {
+			case "ele":
 				ele, err := d.consumeEle(se)
 				if err != nil {
 					return point, err
 				}
 				point.Elevation = ele
-			} else if lvl == 0 && se.Name.Local == "time" {
+			case "time":
 				t, err := d.consumeTime(se)
 				if err != nil {
 					return point, err
 				}
 				point.Time = t
-			} else if lvl == 0 && se.Name.Local == "extensions" {
+			case "extensions":
 				exts, err := d.consumeExtensions(se)
 				if err != nil {
 					return point, err
 				}
 				point.Extensions = exts
-			} else {
-				lvl++
+			default:
+				if err := d.ts.skipTag(); err != nil {
+					return point, err
+				}
 			}
 		case xml.EndElement:
-			ee := tok.(xml.EndElement)
-			if lvl == 0 && ee.Name.Local == "trkpt" {
-				return point, nil
-			}
-			lvl--
+			return point, nil
 		}
 	}
 
@@ -270,7 +257,7 @@ func (d *Decoder) consumePoint(se xml.StartElement) (point Point, err error) {
 
 func (d *Decoder) consumeEle(se xml.StartElement) (ele float64, err error) {
 	for {
-		tok, err := d.xd.Token()
+		tok, err := d.ts.Token()
 		if err != nil {
 			return ele, err
 		}
@@ -293,7 +280,7 @@ func (d *Decoder) consumeEle(se xml.StartElement) (ele float64, err error) {
 
 func (d *Decoder) consumeTime(se xml.StartElement) (t time.Time, err error) {
 	for {
-		tok, err := d.xd.Token()
+		tok, err := d.ts.Token()
 		if err != nil {
 			return t, err
 		}
@@ -318,7 +305,7 @@ func (d *Decoder) consumeExtensions(se xml.StartElement) (tokens []xml.Token, er
 	lvl := 0
 
 	for {
-		tok, err := d.xd.Token()
+		tok, err := d.ts.Token()
 		if err != nil {
 			return tokens, err
 		}
@@ -326,8 +313,7 @@ func (d *Decoder) consumeExtensions(se xml.StartElement) (tokens []xml.Token, er
 		case xml.StartElement:
 			lvl++
 		case xml.EndElement:
-			ee := tok.(xml.EndElement)
-			if lvl == 0 && ee.Name.Local == "extensions" {
+			if lvl == 0 {
 				return tokens, nil
 			}
 			lvl--
