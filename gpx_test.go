@@ -34,6 +34,13 @@ func TestDecoder(t *testing.T) {
 	if dist := track.Distance(); math.Abs(dist-1362.370020) > 0.0000001 {
 		t.Errorf("got %f distance; expected 1362.370020", dist)
 	}
+	expectedDuration, err := time.ParseDuration("39m19s")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if dur := track.Duration(); dur != expectedDuration {
+		t.Errorf("got %s duration; expected %s", dur, expectedDuration)
+	}
 
 	if l := len(track.Segments); l != 1 {
 		t.Errorf("got %d segment(s); expected 1", l)

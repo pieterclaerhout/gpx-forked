@@ -32,6 +32,15 @@ func (d Document) Distance() float64 {
 	return distance
 }
 
+// Duration returns the document’s total duration.
+func (d Document) Duration() time.Duration {
+	var distance int64
+	for _, t := range d.Tracks {
+		distance += int64(t.Duration())
+	}
+	return time.Duration(distance)
+}
+
 // Metadata provides additional information about a GPX document.
 type Metadata struct {
 	Time time.Time
@@ -51,6 +60,15 @@ func (t Track) Distance() float64 {
 	return distance
 }
 
+// Duration returns the track’s total duration.
+func (t Track) Duration() time.Duration {
+	var distance int64
+	for _, s := range t.Segments {
+		distance += int64(s.Duration())
+	}
+	return time.Duration(distance)
+}
+
 // Segments represents a track segment.
 type Segment struct {
 	Points []Point
@@ -65,6 +83,15 @@ func (s Segment) Distance() float64 {
 		}
 	}
 	return distance
+}
+
+// Duration returns the segment’s total duration.
+func (s Segment) Duration() time.Duration {
+	ln := len(s.Points)
+	if ln < 2 {
+		return time.Duration(0)
+	}
+	return s.Points[ln-1].Time.Sub(s.Points[0].Time)
 }
 
 // Point represents a track point. Extensions contains the raw XML tokens
