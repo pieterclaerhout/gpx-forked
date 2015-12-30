@@ -13,11 +13,11 @@ var (
 // GarminTrackPointExtension is Garmin’s TrackPoint extension defined by
 // https://www8.garmin.com/xmlschemas/TrackPointExtensionv1.xsd
 type GarminTrackPointExtension struct {
-	ATemp     float64
-	WTemp     float64
-	Depth     float64
-	HeartRate uint
-	Cadence   uint
+	ATemp     float64 // Air temperature (Celsius)
+	WTemp     float64 // Water temperature (Celsius)
+	Depth     float64 // Diving depth (meters)
+	HeartRate uint    // Heart rate (beats per minute)
+	Cadence   uint    // Cadence (revs per minute)
 }
 
 const GarminTrackPointExtensionNS = "http://www.garmin.com/xmlschemas/TrackPointExtension/v1"
