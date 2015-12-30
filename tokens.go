@@ -19,10 +19,10 @@ type sliceTokener struct {
 }
 
 func (t *sliceTokener) Token() (xml.Token, error) {
-	tok := t.tokens[0]
-	if tok == nil {
+	if len(t.tokens) == 0 {
 		return nil, io.EOF
 	}
+	tok := t.tokens[0]
 	t.tokens = t.tokens[1:]
 	return tok, nil
 }
