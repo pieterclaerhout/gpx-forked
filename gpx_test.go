@@ -30,6 +30,14 @@ func TestDecoder(t *testing.T) {
 	if dur := doc.Duration(); dur != expectedDuration {
 		t.Errorf("got %s duration; expected %s", dur, expectedDuration)
 	}
+	expectedStart := time.Date(2015, 12, 13, 18, 35, 18, 0, time.UTC)
+	if start := doc.Start(); !start.Equal(expectedStart) {
+		t.Errorf("got %v start; expected %v", start, expectedStart)
+	}
+	expectedEnd := time.Date(2015, 12, 13, 19, 14, 37, 0, time.UTC)
+	if end := doc.End(); !end.Equal(expectedEnd) {
+		t.Errorf("got %v end; expected %v", end, expectedEnd)
+	}
 
 	metadataTime := time.Date(2015, 12, 13, 18, 35, 18, 0, time.UTC)
 	if !doc.Metadata.Time.Equal(metadataTime) {

@@ -41,6 +41,22 @@ func (d Document) Duration() time.Duration {
 	return time.Duration(distance)
 }
 
+// Start returns the start time of the first track.
+func (d Document) Start() time.Time {
+	if len(d.Tracks) == 0 {
+		return time.Time{}
+	}
+	return d.Tracks[0].Start()
+}
+
+// End returns the end time of the last track.
+func (d Document) End() time.Time {
+	if len(d.Tracks) == 0 {
+		return time.Time{}
+	}
+	return d.Tracks[len(d.Tracks)-1].End()
+}
+
 // Metadata provides additional information about a GPX document.
 type Metadata struct {
 	Time time.Time
@@ -69,6 +85,22 @@ func (t Track) Duration() time.Duration {
 	return time.Duration(distance)
 }
 
+// Start returns the start time of the first segment.
+func (t Track) Start() time.Time {
+	if len(t.Segments) == 0 {
+		return time.Time{}
+	}
+	return t.Segments[0].Start()
+}
+
+// End returns the end time of the last segment.
+func (t Track) End() time.Time {
+	if len(t.Segments) == 0 {
+		return time.Time{}
+	}
+	return t.Segments[len(t.Segments)-1].End()
+}
+
 // Segments represents a track segment.
 type Segment struct {
 	Points []Point
@@ -92,6 +124,22 @@ func (s Segment) Duration() time.Duration {
 		return time.Duration(0)
 	}
 	return s.Points[ln-1].Time.Sub(s.Points[0].Time)
+}
+
+// Start returns the time of the first point.
+func (s Segment) Start() time.Time {
+	if len(s.Points) == 0 {
+		return time.Time{}
+	}
+	return s.Points[0].Time
+}
+
+// End returns the time of the last point.
+func (s Segment) End() time.Time {
+	if len(s.Points) == 0 {
+		return time.Time{}
+	}
+	return s.Points[len(s.Points)-1].Time
 }
 
 // Point represents a track point. Extensions contains the raw XML tokens
