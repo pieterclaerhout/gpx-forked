@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"errors"
 	"io"
+	"strconv"
 	"time"
 )
 
@@ -55,6 +56,14 @@ func (ts *tokenStream) consumeTime() (time.Time, error) {
 		return time.Time{}, err
 	}
 	return time.Parse(time.RFC3339Nano, s)
+}
+
+func (ts *tokenStream) consumeFloat() (float64, error) {
+	s, err := ts.consumeString()
+	if err != nil {
+		return 0, err
+	}
+	return strconv.ParseFloat(s, 64)
 }
 
 func (ts *tokenStream) skipTag() error {

@@ -224,7 +224,7 @@ func (d *Decoder) consumePoint(se xml.StartElement) (point Point, err error) {
 			se := tok.(xml.StartElement)
 			switch se.Name.Local {
 			case "ele":
-				ele, err := d.consumeEle(se)
+				ele, err := d.ts.consumeFloat()
 				if err != nil {
 					return point, err
 				}
@@ -248,29 +248,6 @@ func (d *Decoder) consumePoint(se xml.StartElement) (point Point, err error) {
 			}
 		case xml.EndElement:
 			return point, nil
-		}
-	}
-
-	panic("gpx: internal error")
-}
-
-func (d *Decoder) consumeEle(se xml.StartElement) (ele float64, err error) {
-	for {
-		tok, err := d.ts.Token()
-		if err != nil {
-			return ele, err
-		}
-		switch tok.(type) {
-		case xml.CharData:
-			cd := tok.(xml.CharData)
-			ele, err = strconv.ParseFloat(string(cd), 64)
-			if err != nil && d.Strict {
-				return ele, fmt.Errorf("gpx: invalid <ele>: %s", err)
-			}
-		case xml.StartElement:
-			return ele, errors.New("gpx: invalid <ele>")
-		case xml.EndElement:
-			return ele, nil
 		}
 	}
 
