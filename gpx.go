@@ -61,8 +61,6 @@ func (d *Decoder) findGPX() (se xml.StartElement, err error) {
 			return se, nil
 		}
 	}
-
-	return se, errors.New("gpx: no start <gpx> found")
 }
 
 func (d *Decoder) consumeGPX(se xml.StartElement) (doc Document, err error) {
@@ -103,8 +101,6 @@ func (d *Decoder) consumeGPX(se xml.StartElement) (doc Document, err error) {
 			return doc, nil
 		}
 	}
-
-	panic("gpx: internal error")
 }
 
 func (d *Decoder) consumeMetadata(se xml.StartElement) (metadata Metadata, err error) {
@@ -132,8 +128,6 @@ func (d *Decoder) consumeMetadata(se xml.StartElement) (metadata Metadata, err e
 			return metadata, nil
 		}
 	}
-
-	panic("gpx: internal error")
 }
 
 func (d *Decoder) consumeTrack(se xml.StartElement) (track Track, err error) {
@@ -161,8 +155,6 @@ func (d *Decoder) consumeTrack(se xml.StartElement) (track Track, err error) {
 			return track, nil
 		}
 	}
-
-	panic("gpx: internal error")
 }
 
 func (d *Decoder) consumeSegment(se xml.StartElement) (seg Segment, err error) {
@@ -190,8 +182,6 @@ func (d *Decoder) consumeSegment(se xml.StartElement) (seg Segment, err error) {
 			return seg, nil
 		}
 	}
-
-	panic("gpx: internal error")
 }
 
 func (d *Decoder) consumePoint(se xml.StartElement) (point Point, err error) {
@@ -250,8 +240,6 @@ func (d *Decoder) consumePoint(se xml.StartElement) (point Point, err error) {
 			return point, nil
 		}
 	}
-
-	panic("gpx: internal error")
 }
 
 func (d *Decoder) consumeExtensions(se xml.StartElement) (tokens []xml.Token, err error) {
@@ -273,6 +261,4 @@ func (d *Decoder) consumeExtensions(se xml.StartElement) (tokens []xml.Token, er
 		}
 		tokens = append(tokens, xml.CopyToken(tok))
 	}
-
-	panic("gpx: internal error")
 }
