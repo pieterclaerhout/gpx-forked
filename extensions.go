@@ -13,8 +13,8 @@ var (
 // GarminTrackPointExtension is Garmin’s TrackPoint extension defined by
 // https://www8.garmin.com/xmlschemas/TrackPointExtensionv1.xsd
 type GarminTrackPointExtension struct {
-	ATemp     float64 // Air temperature (Celsius)
-	WTemp     float64 // Water temperature (Celsius)
+	AirTemp   float64 // Air temperature (Celsius)
+	WaterTemp float64 // Water temperature (Celsius)
 	Depth     float64 // Diving depth (meters)
 	HeartRate uint    // Heart rate (beats per minute)
 	Cadence   uint    // Cadence (revs per minute)
@@ -64,14 +64,14 @@ func ParseGarminTrackPointExtension(tokens []xml.Token) (e GarminTrackPointExten
 					return e, err
 				}
 				n, _ := strconv.ParseFloat(s, 64)
-				e.ATemp = n
+				e.AirTemp = n
 			case "wtemp":
 				s, err := ts.consumeString()
 				if err != nil {
 					return e, err
 				}
 				n, _ := strconv.ParseFloat(s, 64)
-				e.WTemp = n
+				e.WaterTemp = n
 			case "depth":
 				s, err := ts.consumeString()
 				if err != nil {

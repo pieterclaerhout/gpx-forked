@@ -26,8 +26,8 @@ func TestGarminTrackPointExtension(t *testing.T) {
 	expectedExt := GarminTrackPointExtension{
 		HeartRate: 126,
 		Cadence:   81,
-		ATemp:     23,
-		WTemp:     19,
+		AirTemp:   23,
+		WaterTemp: 19,
 		Depth:     9,
 	}
 	if !reflect.DeepEqual(ext, expectedExt) {
