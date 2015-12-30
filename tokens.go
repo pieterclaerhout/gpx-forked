@@ -66,6 +66,14 @@ func (ts *tokenStream) consumeFloat() (float64, error) {
 	return strconv.ParseFloat(s, 64)
 }
 
+func (ts *tokenStream) consumeInt() (int, error) {
+	s, err := ts.consumeString()
+	if err != nil {
+		return 0, err
+	}
+	return strconv.Atoi(s)
+}
+
 func (ts *tokenStream) skipTag() error {
 	lvl := 0
 	for {

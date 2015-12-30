@@ -3,7 +3,6 @@ package gpx
 import (
 	"encoding/xml"
 	"errors"
-	"strconv"
 )
 
 var (
@@ -45,40 +44,35 @@ func ParseGarminTrackPointExtension(tokens []xml.Token) (e GarminTrackPointExten
 			}
 			switch se.Name.Local {
 			case "hr":
-				s, err := ts.consumeString()
+				hr, err := ts.consumeInt()
 				if err != nil {
 					return e, err
 				}
-				n, _ := strconv.Atoi(s)
-				e.HeartRate = uint(n)
+				e.HeartRate = uint(hr)
 			case "cad":
-				s, err := ts.consumeString()
+				cad, err := ts.consumeInt()
 				if err != nil {
 					return e, err
 				}
-				n, _ := strconv.Atoi(s)
-				e.Cadence = uint(n)
+				e.Cadence = uint(cad)
 			case "atemp":
-				s, err := ts.consumeString()
+				atemp, err := ts.consumeFloat()
 				if err != nil {
 					return e, err
 				}
-				n, _ := strconv.ParseFloat(s, 64)
-				e.AirTemp = n
+				e.AirTemp = atemp
 			case "wtemp":
-				s, err := ts.consumeString()
+				wtemp, err := ts.consumeFloat()
 				if err != nil {
 					return e, err
 				}
-				n, _ := strconv.ParseFloat(s, 64)
-				e.WaterTemp = n
+				e.WaterTemp = wtemp
 			case "depth":
-				s, err := ts.consumeString()
+				depth, err := ts.consumeFloat()
 				if err != nil {
 					return e, err
 				}
-				n, _ := strconv.ParseFloat(s, 64)
-				e.Depth = n
+				e.Depth = depth
 			default:
 				ts.skipTag()
 			}
