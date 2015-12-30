@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"strconv"
-	"time"
 )
 
 const nsGPX11 = "http://www.topografix.com/GPX/1/1"
@@ -119,7 +118,7 @@ func (d *Decoder) consumeMetadata(se xml.StartElement) (metadata Metadata, err e
 			se := tok.(xml.StartElement)
 			switch se.Name.Local {
 			case "time":
-				t, err := d.consumeTime(se)
+				t, err := d.ts.consumeTime()
 				if err != nil {
 					return metadata, err
 				}
@@ -231,7 +230,7 @@ func (d *Decoder) consumePoint(se xml.StartElement) (point Point, err error) {
 				}
 				point.Elevation = ele
 			case "time":
-				t, err := d.consumeTime(se)
+				t, err := d.ts.consumeTime()
 				if err != nil {
 					return point, err
 				}
@@ -272,29 +271,6 @@ func (d *Decoder) consumeEle(se xml.StartElement) (ele float64, err error) {
 			return ele, errors.New("gpx: invalid <ele>")
 		case xml.EndElement:
 			return ele, nil
-		}
-	}
-
-	panic("gpx: internal error")
-}
-
-func (d *Decoder) consumeTime(se xml.StartElement) (t time.Time, err error) {
-	for {
-		tok, err := d.ts.Token()
-		if err != nil {
-			return t, err
-		}
-		switch tok.(type) {
-		case xml.CharData:
-			cd := tok.(xml.CharData)
-			t, err = time.Parse(time.RFC3339Nano, string(cd))
-			if err != nil && d.Strict {
-				return t, fmt.Errorf("gpx: invalid <time>: %s", err)
-			}
-		case xml.StartElement:
-			return t, errors.New("gpx: invalid <time>")
-		case xml.EndElement:
-			return t, nil
 		}
 	}
 

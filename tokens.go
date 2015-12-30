@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"errors"
 	"io"
+	"time"
 )
 
 // A tokener provides tokens.
@@ -46,6 +47,14 @@ func (ts *tokenStream) consumeString() (string, error) {
 			return "", errors.New("gpx: unexpected element while reading string")
 		}
 	}
+}
+
+func (ts *tokenStream) consumeTime() (time.Time, error) {
+	s, err := ts.consumeString()
+	if err != nil {
+		return time.Time{}, err
+	}
+	return time.Parse(time.RFC3339Nano, s)
 }
 
 func (ts *tokenStream) skipTag() error {
