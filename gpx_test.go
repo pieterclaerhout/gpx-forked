@@ -17,9 +17,18 @@ func TestDecoder(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-
 	if doc.Version != "1.1" {
 		t.Errorf("got wrong version %q", doc.Version)
+	}
+	if dist := doc.Distance(); math.Abs(dist-1362.370020) > 0.0000001 {
+		t.Errorf("got %f distance; expected 1362.370020", dist)
+	}
+	expectedDuration, err := time.ParseDuration("39m19s")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if dur := doc.Duration(); dur != expectedDuration {
+		t.Errorf("got %s duration; expected %s", dur, expectedDuration)
 	}
 
 	metadataTime := time.Date(2015, 12, 13, 18, 35, 18, 0, time.UTC)
@@ -31,16 +40,6 @@ func TestDecoder(t *testing.T) {
 		t.Errorf("got %d track(s); expected 1", l)
 	}
 	track := doc.Tracks[0]
-	if dist := track.Distance(); math.Abs(dist-1362.370020) > 0.0000001 {
-		t.Errorf("got %f distance; expected 1362.370020", dist)
-	}
-	expectedDuration, err := time.ParseDuration("39m19s")
-	if err != nil {
-		t.Fatal(err)
-	}
-	if dur := track.Duration(); dur != expectedDuration {
-		t.Errorf("got %s duration; expected %s", dur, expectedDuration)
-	}
 
 	if l := len(track.Segments); l != 1 {
 		t.Errorf("got %d segment(s); expected 1", l)
