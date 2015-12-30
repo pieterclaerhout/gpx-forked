@@ -26,6 +26,10 @@
         <extensions>
           <gpxtpx:TrackPointExtension>
             <gpxtpx:hr>126</gpxtpx:hr>
+            <gpxtpx:cad>81</gpxtpx:cad>
+            <gpxtpx:atemp>23</gpxtpx:atemp>
+            <gpxtpx:wtemp>19</gpxtpx:wtemp>
+            <gpxtpx:depth>9</gpxtpx:depth>
           </gpxtpx:TrackPointExtension>
         </extensions>
       </trkpt>

@@ -4,6 +4,10 @@
 
 `go-gpx` is a Go library for parsing GPX 1.1 documents.
 
+It supports parsing the following extensions:
+
+* Garmin’s TrackPoint extension (`http://www.garmin.com/xmlschemas/TrackPointExtension/v1`)
+
 ## Installation
 
     go get github.com/thcyron/go-gpx
