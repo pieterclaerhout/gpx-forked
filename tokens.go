@@ -75,7 +75,6 @@ func (ts *tokenStream) consumeInt() (int, error) {
 }
 
 func (ts *tokenStream) skipTag() error {
-	lvl := 0
 	for {
 		tok, err := ts.Token()
 		if err != nil {
@@ -83,12 +82,11 @@ func (ts *tokenStream) skipTag() error {
 		}
 		switch tok.(type) {
 		case xml.StartElement:
-			lvl++
-		case xml.EndElement:
-			if lvl == 0 {
+			if err := ts.skipTag(); err != nil {
 				return nil
 			}
-			lvl--
+		case xml.EndElement:
+			return nil
 		}
 	}
 }
