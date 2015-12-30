@@ -23,7 +23,7 @@ type Document struct {
 	Tracks   []Track
 }
 
-// Distance returns the track’s total distance in meters.
+// Distance returns the document’s total distance in meters.
 func (d Document) Distance() float64 {
 	var distance float64
 	for _, t := range d.Tracks {
