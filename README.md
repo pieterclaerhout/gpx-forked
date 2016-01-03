@@ -1,8 +1,8 @@
-# go-gpx
+# gpx
 
-[![Travis CI status](https://api.travis-ci.org/thcyron/go-gpx.svg)](https://travis-ci.org/thcyron/go-gpx)
+[![Travis CI status](https://api.travis-ci.org/thcyron/gpx.svg)](https://travis-ci.org/thcyron/gpx)
 
-`go-gpx` is a Go library for parsing GPX 1.1 documents.
+`gpx` is a Go library for parsing GPX 1.1 documents.
 
 It supports parsing the following extensions:
 
@@ -10,7 +10,7 @@ It supports parsing the following extensions:
 
 ## Installation
 
-    go get github.com/thcyron/go-gpx
+    go get github.com/thcyron/gpx
 
 ## Usage
 
@@ -30,8 +30,8 @@ fmt.Printf("document has %d track(s)\n", len(doc.Tracks))
 
 ## Documentation
 
-Documentation is available at [Godoc](http://godoc.org/github.com/thcyron/go-gpx).
+Documentation is available at [GoDoc](http://godoc.org/github.com/thcyron/gpx).
 
 ## License
 
-`go-gpx` is licensed under the MIT license.
+`gpx` is licensed under the MIT license.
