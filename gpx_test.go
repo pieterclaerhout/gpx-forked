@@ -49,6 +49,9 @@ func TestDecoder(t *testing.T) {
 	}
 	track := doc.Tracks[0]
 
+	if track.Name != "Running" {
+		t.Errorf("got %q name; expected %q", track.Name, "Running")
+	}
 	if l := len(track.Segments); l != 1 {
 		t.Errorf("got %d segment(s); expected 1", l)
 	}
