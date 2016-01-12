@@ -15,6 +15,7 @@
     </link>
     <time>2015-12-13T18:35:18.000Z</time>
   </metadata>
+  <foo></foo>
   <trk>
     <name>Running</name>
     <link href="http://www.runtastic.com/sport-sessions/1089639152">
@@ -25,18 +26,25 @@
         <ele>346.874267578125</ele>
         <time>2015-12-13T18:35:18.000Z</time>
         <extensions>
+          <BogusExtension>
+            <Bogus />
+          </BogusExtension>
           <gpxtpx:TrackPointExtension>
             <gpxtpx:hr>126</gpxtpx:hr>
             <gpxtpx:cad>81</gpxtpx:cad>
             <gpxtpx:atemp>23</gpxtpx:atemp>
             <gpxtpx:wtemp>19</gpxtpx:wtemp>
             <gpxtpx:depth>9</gpxtpx:depth>
+            <gpxtpx:foo>foo</gpxtpx:foo>
+            <foo></foo>
           </gpxtpx:TrackPointExtension>
         </extensions>
       </trkpt>
+      <foo></foo>
       <trkpt lon="11.1254367828369141" lat="49.3968467712402344">
         <ele>348.738525390625</ele>
         <time>2015-12-13T18:35:26.000Z</time>
+        <foo></foo>
         <extensions>
           <gpxtpx:TrackPointExtension>
             <gpxtpx:hr>133</gpxtpx:hr>
