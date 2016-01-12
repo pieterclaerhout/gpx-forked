@@ -6,6 +6,13 @@ import (
 	"testing"
 )
 
+func TestNonexistantExtension(t *testing.T) {
+	point := Point{}
+	if _, err := ParseGarminTrackPointExtension(point.Extensions); err != ErrNoSuchExtension {
+		t.Errorf("expected ErrNoSuchExtension")
+	}
+}
+
 func TestGarminTrackPointExtension(t *testing.T) {
 	f, err := os.Open("test/test.gpx")
 	if err != nil {
