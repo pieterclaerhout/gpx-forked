@@ -472,6 +472,17 @@ func (d *Decoder) consumeBounds(se xml.StartElement) (bounds Bounds, err error) 
 		}
 	}
 
+	if d.Strict {
+		tok, err := d.ts.Token()
+		if err != nil {
+			return bounds, err
+		}
+		if _, ok := tok.(xml.EndElement); !ok {
+			return bounds, fmt.Errorf("gpx: <bounds> not a self-closing element")
+		}
+		return bounds, nil
+	}
+
 	for {
 		tok, err := d.ts.Token()
 		if err != nil {
@@ -535,6 +546,17 @@ func (d *Decoder) consumeEmail(se xml.StartElement) (email Email, err error) {
 		case "domain":
 			email.Domain = a.Value
 		}
+	}
+
+	if d.Strict {
+		tok, err := d.ts.Token()
+		if err != nil {
+			return email, err
+		}
+		if _, ok := tok.(xml.EndElement); !ok {
+			return email, fmt.Errorf("gpx: <email> not a self-closing element")
+		}
+		return email, nil
 	}
 
 	for {
