@@ -12,8 +12,21 @@
     </copyright>
     <link href="http://www.runtastic.com">
       <text>runtastic</text>
+      <type>text/html</type>
     </link>
+    <author>
+      <name>Runtastic</name>
+      <email id="runtastic" domain="example.com" />
+      <link href="http://www.runtastic.com">
+        <text>runtastic</text>
+        <type>text/html</type>
+      </link>
+    </author>
     <time>2015-12-13T18:35:18.000Z</time>
+    <name>Run</name>
+    <desc>Running in the forest</desc>
+    <keywords>run running forest sport sports</keywords>
+    <bounds minlat="49.3956527709960938" minlon="11.1253080368041992" maxlat="49.4017448425292969" maxlon="11.1280641555786133" />
   </metadata>
   <foo></foo>
   <trk>
