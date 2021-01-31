@@ -31,6 +31,7 @@
   <foo></foo>
   <trk>
     <name>Running</name>
+    <type>running</type>
     <link href="http://www.runtastic.com/sport-sessions/1089639152">
       <text>Visit this link to view this activity on runtastic.com</text>
     </link>

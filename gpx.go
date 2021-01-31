@@ -108,6 +108,7 @@ type Bounds struct {
 // Track represents a track.
 type Track struct {
 	Name     string
+	Type     string
 	Segments []Segment
 }
 
@@ -597,6 +598,12 @@ func (d *Decoder) consumeTrack(se xml.StartElement) (track Track, err error) {
 					return track, err
 				}
 				track.Name = name
+			case "type":
+				trackType, err := d.ts.consumeString()
+				if err != nil {
+					return track, err
+				}
+				track.Type = trackType
 			default:
 				if err := d.ts.skipTag(); err != nil {
 					return track, err
