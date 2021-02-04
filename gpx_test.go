@@ -20,7 +20,7 @@ func TestDecoder(t *testing.T) {
 	if doc.Version != "1.1" {
 		t.Errorf("got wrong version %q", doc.Version)
 	}
-	if dist := doc.Distance(); math.Abs(dist-1362.370020) > 0.0000001 {
+	if dist := doc.DistanceInMeters(); math.Abs(dist-1362.370020) > 0.0000001 {
 		t.Errorf("got %f distance; expected 1362.370020", dist)
 	}
 	expectedDuration, err := time.ParseDuration("39m19s")

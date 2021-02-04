@@ -23,8 +23,8 @@ type Document struct {
 	Tracks   []Track
 }
 
-// Distance returns the document’s total distance in meters.
-func (d Document) Distance() float64 {
+// DistanceInMeters returns the document's total distance in meters.
+func (d Document) DistanceInMeters() float64 {
 	var distance float64
 	for _, t := range d.Tracks {
 		distance += t.Distance()
@@ -32,7 +32,17 @@ func (d Document) Distance() float64 {
 	return distance
 }
 
-// Duration returns the document’s total duration.
+// DistanceInKilometers returns the document's total distance in kilometers.
+func (d Document) DistanceInKilometers() float64 {
+	return d.DistanceInMeters() / 1000.0
+}
+
+// DistanceInMiles returns the document's total distance in miles.
+func (d Document) DistanceInMiles() float64 {
+	return d.DistanceInMeters() / 1609.0
+}
+
+// Duration returns the document's total duration.
 func (d Document) Duration() time.Duration {
 	var distance int64
 	for _, t := range d.Tracks {
@@ -112,7 +122,7 @@ type Track struct {
 	Segments []Segment
 }
 
-// Distance returns the track’s total distance in meters.
+// Distance returns the track's total distance in meters.
 func (t Track) Distance() float64 {
 	var distance float64
 	for _, s := range t.Segments {
@@ -121,7 +131,7 @@ func (t Track) Distance() float64 {
 	return distance
 }
 
-// Duration returns the track’s total duration.
+// Duration returns the track's total duration.
 func (t Track) Duration() time.Duration {
 	var distance int64
 	for _, s := range t.Segments {
@@ -151,7 +161,7 @@ type Segment struct {
 	Points []Point
 }
 
-// Distance returns the segment’s total distance in meters.
+// Distance returns the segment's total distance in meters.
 func (s Segment) Distance() float64 {
 	var distance float64
 	for i, p := range s.Points {
@@ -162,7 +172,7 @@ func (s Segment) Distance() float64 {
 	return distance
 }
 
-// Duration returns the segment’s total duration.
+// Duration returns the segment's total duration.
 func (s Segment) Duration() time.Duration {
 	ln := len(s.Points)
 	if ln < 2 {
@@ -188,7 +198,7 @@ func (s Segment) End() time.Time {
 }
 
 // Point represents a track point. Extensions contains the raw XML tokens
-// of the point’s extensions if it has any (excluding the <extensions>
+// of the point's extensions if it has any (excluding the <extensions>
 // start and end tag).
 type Point struct {
 	Latitude   float64
